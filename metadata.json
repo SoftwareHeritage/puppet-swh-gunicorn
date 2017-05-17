@@ -1,0 +1,15 @@
+{
+  "name": "swh-gunicorn",
+  "version": "0.1.0",
+  "author": "swh",
+  "summary": "Configure gunicorn instances",
+  "license": "Apache-2.0",
+  "source": "http://forge.softwareheritage.org/source/puppet-swh-gunicorn.git",
+  "project_page": "http://forge.softwareheritage.org/source/puppet-swh-gunicorn/",
+  "issues_url": "http://forge.softwareheritage.org/source/puppet-swh-gunicorn/",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+
