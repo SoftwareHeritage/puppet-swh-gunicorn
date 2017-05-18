@@ -5,8 +5,8 @@ class gunicorn::apt_config {
       'gunicorn',
       'gunicorn-examples',
       'gunicorn3',
-      'python',
-      'python3',
+      'python-gunicorn',
+      'python3-gunicorn',
     ]
 
     ::apt::pin {'gunicorn':
