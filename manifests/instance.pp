@@ -123,7 +123,7 @@ define gunicorn::instance (
 
       exec {"systemd-tmpfiles-update-${service_name}":
         path        => '/sbin:/usr/sbin:/bin:/usr/bin',
-        command     => "systemd-tmpfiles --update ${tmpfiles_file}",
+        command     => "systemd-tmpfiles --create ${tmpfiles_file}",
         refreshonly => true,
         require     => File[$tmpfiles_file]
       }

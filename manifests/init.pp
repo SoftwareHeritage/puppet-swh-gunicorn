@@ -55,7 +55,7 @@ class gunicorn {
 
   exec {'systemd-tmpfiles-update-gunicorn':
     path        => '/sbin:/usr/sbin:/bin:/usr/bin',
-    command     => 'systemd-tmpfiles --update /etc/tmpfiles.d/gunicorn.conf',
+    command     => 'systemd-tmpfiles --create /etc/tmpfiles.d/gunicorn.conf',
     refreshonly => true,
     require     => File['/etc/tmpfiles.d/gunicorn.conf']
   }
