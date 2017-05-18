@@ -1,0 +1,21 @@
+# File managed by puppet (class gunicorn::instance <%= @name %>), changes will be lost
+
+[Unit]
+Description=Gunicorn instance <%= @name %>
+ConditionPathExists=/etc/gunicorn/instances/<%= @name %>.cfg
+PartOf=gunicorn.service
+ReloadPropagatedFrom=gunicorn.service
+Before=gunicorn.service
+
+[Service]
+User=<%= @user %>
+Group=<%= @group %>
+PIDFile=<%= @runtime_dir %>/pidfile
+RuntimeDirectory=<%= @runtime_dir %>
+WorkingDirectory=<%= @working_dir_override %>
+ExecStart=/usr/bin/gunicorn3 -p <%= @runtime_dir %>/pidfile -c <%= @config_file %> <%= @executable %>
+ExecStop=/bin/kill -TERM $MAINPID
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target
