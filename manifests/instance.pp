@@ -137,6 +137,10 @@ define gunicorn::instance (
         ensure  => 'running',
         enable  => $service_enable,
         restart => "/bin/systemctl reload ${service_name}.service",
+        require => [
+          File[$service_file],
+          Exec['systemd-daemon-reload'],
+        ],
       }
     }
 
