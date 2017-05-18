@@ -103,7 +103,7 @@ define gunicorn::instance (
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
-        content => template('gunicorn/gunicorn-instance.cfg.erb'),
+        content => template('gunicorn/gunicorn-instance.service.erb'),
         notify  => Exec['systemd-daemon-reload'],
       }
 
