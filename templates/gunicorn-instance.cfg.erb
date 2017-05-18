@@ -29,7 +29,7 @@ class Logger(gunicorn.glogging.Logger):
             self.exception('Failed processing access log entry')
 
 logger_class = Logger
-logconfig = 'logconfig.ini'
+logconfig = '/etc/gunicorn/logconfig.ini'
 
 # custom settings
 <% @settings.each do |key, value| -%>
