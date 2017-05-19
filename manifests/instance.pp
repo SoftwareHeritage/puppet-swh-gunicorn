@@ -77,6 +77,8 @@ define gunicorn::instance (
     default: { err("Unknown value ensure => ${ensure}.") }
     'enabled', 'present': {
 
+      include ::gunicorn
+
       # Uses variables:
       #  - $settings
       #  - $name
