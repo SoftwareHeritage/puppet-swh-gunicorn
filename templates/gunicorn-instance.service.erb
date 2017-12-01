@@ -13,9 +13,9 @@ Group=<%= @group %>
 PIDFile=<%= @runtime_dir %>/pidfile
 RuntimeDirectory=<%= @runtime_dir %>
 WorkingDirectory=<%= @working_dir_override %>
-<% @environment.each do |key, value| %>
+<% @environment.each do |key, value| -%>
 Environment=<%= key %>=<%= value %>
-<% end %>
+<% end -%>
 ExecStart=/usr/bin/gunicorn3 -p <%= @runtime_dir %>/pidfile -c <%= @config_file %> <%= @executable %>
 ExecStop=/bin/kill -TERM $MAINPID
 ExecReload=/bin/kill -HUP $MAINPID
