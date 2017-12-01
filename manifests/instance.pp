@@ -7,6 +7,9 @@
 # [*ensure*]
 #   Whether the instance should be enabled, present (but disabled) or absent.
 #
+# [*environment*]
+#   A hash of environment variables to start the service with.
+#
 # [*executable*]
 #   The wsgi callable to pass to gunicorn
 #
@@ -17,6 +20,9 @@
 #
 #  gunicorn::instance {'foo':
 #    ensure      => enabled,
+#    environment => {
+#      FOOENV => 'foovar',
+#    }
 #    executable  => 'foo.wsgi:app'
 #    user        => 'foouser',
 #    group       => 'foogroup',
@@ -53,7 +59,8 @@ define gunicorn::instance (
   $config_mode = '0644',
   $working_dir = undef,
   $log_only_errors = true,
-  $settings = {}
+  $settings = {},
+  $environment = {}
 ) {
   $config_file = "/etc/gunicorn/instances/${name}.cfg"
   $service_name = "gunicorn-${name}"
@@ -94,6 +101,7 @@ define gunicorn::instance (
 
       # Uses variables:
       #  - $config_file
+      #  - $environment
       #  - $executable
       #  - $group
       #  - $name
