@@ -64,8 +64,8 @@ define gunicorn::instance (
 ) {
   $config_file = "/etc/gunicorn/instances/${name}.cfg"
   $service_name = "gunicorn-${name}"
-  $service_file = "/etc/systemd/system/${service_name}.service"
-  $tmpfiles_file = "/etc/tmpfiles.d/${service_name}.conf"
+  $unit_name = "${service_name}.service"
+  $tmpfile_name = "${service_name}.conf"
   $runtime_dir = "/run/gunicorn/${name}"
 
   if $working_dir {
@@ -108,34 +108,19 @@ define gunicorn::instance (
       #  - $runtime_dir
       #  - $user
       #  - $working_dir_override
-      file {$service_file:
+      ::systemd::unit_file {$unit_name:
         ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
         content => template('gunicorn/gunicorn-instance.service.erb'),
-        notify  => Exec['systemd-daemon-reload'],
-      }
+      } ~> Service[$service_name]
 
       # Uses variables:
       #  - $group
       #  - $name
       #  - $runtime_dir
       #  - $user
-      file {$tmpfiles_file:
+      ::systemd::tmpfile {$tmpfile_name:
         ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
         content => template('gunicorn/gunicorn-instance.tmpfiles.erb'),
-        notify  => Exec["systemd-tmpfiles-update-${service_name}"],
-      }
-
-      exec {"systemd-tmpfiles-update-${service_name}":
-        path        => '/sbin:/usr/sbin:/bin:/usr/bin',
-        command     => "systemd-tmpfiles --create ${tmpfiles_file}",
-        refreshonly => true,
-        require     => File[$tmpfiles_file]
       }
 
       $service_enable = $ensure ? {
@@ -148,16 +133,20 @@ define gunicorn::instance (
         enable  => $service_enable,
         restart => "/bin/systemctl reload ${service_name}.service",
         require => [
-          File[$service_file],
           File[$config_file],
-          Exec['systemd-daemon-reload'],
         ],
       }
     }
 
     'absent': {
-      file {[$tmpfiles_file, $service_file]:
-        ensure => 'absent'
+      ::systemd::unit_file {$unit_name:
+        ensure => absent,
+      }
+      ::systemd::tmpfile {$tmpfile_name:
+        ensure  => absent,
+      }
+      file {$config_file:
+        ensure  => absent,
       }
     }
   }
