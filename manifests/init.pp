@@ -27,13 +27,8 @@ class gunicorn {
     purge   => true,
   }
 
-  file {'/etc/tmpfiles.d/gunicorn.conf':
-    ensure => directory,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0644',
+  ::systemd::tmpfile {'gunicorn.conf':
     source => 'puppet:///modules/gunicorn/gunicorn.tmpfiles',
-    notify => Exec['systemd-tmpfiles-update-gunicorn'],
   }
 
   file {'/etc/gunicorn/logconfig.ini':
@@ -42,12 +37,5 @@ class gunicorn {
     group  => 'root',
     mode   => '0644',
     source => 'puppet:///modules/gunicorn/logconfig.ini',
-  }
-
-  exec {'systemd-tmpfiles-update-gunicorn':
-    path        => '/sbin:/usr/sbin:/bin:/usr/bin',
-    command     => 'systemd-tmpfiles --create /etc/tmpfiles.d/gunicorn.conf',
-    refreshonly => true,
-    require     => File['/etc/tmpfiles.d/gunicorn.conf']
   }
 }
