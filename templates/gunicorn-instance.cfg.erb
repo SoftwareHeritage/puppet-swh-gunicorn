@@ -1,6 +1,11 @@
 # Gunicorn instance configuration.
 # Managed by puppet (class gunicorn::instance <%= @name %>); changes will be lost
 
+<%- if @config_base_module -%>
+# import all settings from the base module
+from <%= @config_base_module %> import *
+<%- end -%>
+
 import traceback
 import gunicorn.glogging
 

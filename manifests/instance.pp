@@ -26,7 +26,7 @@
 #    executable  => 'foo.wsgi:app'
 #    user        => 'foouser',
 #    group       => 'foogroup',
-#    config_mode => 0644
+#    config_mode => 0644,
 #    settings    => {
 #      plugin              => 'python3',
 #      protocol            => $uwsgi_protocol,
@@ -58,6 +58,7 @@ define gunicorn::instance (
   $ensure = 'enabled',
   $config_mode = '0644',
   $working_dir = undef,
+  $config_base_module = undef,
   $log_only_errors = true,
   $settings = {},
   $environment = {}
@@ -90,6 +91,7 @@ define gunicorn::instance (
       #  - $settings
       #  - $name
       #  - $log_only_errors_str
+      #  - $config_base_module
       file {$config_file:
         ensure  => present,
         owner   => $user,
