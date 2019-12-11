@@ -3,7 +3,11 @@
 
 <%- if @config_base_module -%>
 # import all settings from the base module
-from <%= @config_base_module %> import *
+try:
+    from <%= @config_base_module %> import *
+except:
+    import logging
+    logging.exception('Failed to import configuration from <%= @config_base_module %>')
 <%- end -%>
 
 import traceback
