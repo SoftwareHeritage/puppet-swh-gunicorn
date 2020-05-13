@@ -72,7 +72,7 @@ define gunicorn::instance (
   if $working_dir {
     $working_dir_override = $working_dir
   } else {
-    $working_dir_override = $runtime_dir
+    $working_dir_override = "/run/$runtime_dir"
   }
 
   if $log_only_errors {
