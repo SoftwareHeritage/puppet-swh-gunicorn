@@ -67,7 +67,7 @@ define gunicorn::instance (
   $service_name = "gunicorn-${name}"
   $unit_name = "${service_name}.service"
   $tmpfile_name = "${service_name}.conf"
-  $runtime_dir = "/run/gunicorn/${name}"
+  $runtime_dir = "gunicorn/${name}"
 
   if $working_dir {
     $working_dir_override = $working_dir
@@ -115,14 +115,8 @@ define gunicorn::instance (
         content => template('gunicorn/gunicorn-instance.service.erb'),
       } ~> Service[$service_name]
 
-      # Uses variables:
-      #  - $group
-      #  - $name
-      #  - $runtime_dir
-      #  - $user
       ::systemd::tmpfile {$tmpfile_name:
-        ensure  => present,
-        content => template('gunicorn/gunicorn-instance.tmpfiles.erb'),
+        ensure  => absent,
       }
 
       $service_enable = $ensure ? {
