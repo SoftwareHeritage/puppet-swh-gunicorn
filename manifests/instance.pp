@@ -67,12 +67,13 @@ define gunicorn::instance (
   $service_name = "gunicorn-${name}"
   $unit_name = "${service_name}.service"
   $tmpfile_name = "${service_name}.conf"
-  $runtime_dir = "gunicorn/${name}"
+  $short_runtime_dir = "gunicorn/${name}"
+  $full_runtime_dir = "/run/${short_runtime_dir}"
 
   if $working_dir {
     $working_dir_override = $working_dir
   } else {
-    $working_dir_override = "/run/$runtime_dir"
+    $working_dir_override = $full_runtime_dir
   }
 
   if $log_only_errors {
@@ -107,7 +108,8 @@ define gunicorn::instance (
       #  - $executable
       #  - $group
       #  - $name
-      #  - $runtime_dir
+      #  - $short_runtime_dir
+      #  - $full_runtime_dir
       #  - $user
       #  - $working_dir_override
       ::systemd::unit_file {$unit_name:

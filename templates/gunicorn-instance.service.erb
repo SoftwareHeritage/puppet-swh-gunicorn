@@ -10,13 +10,13 @@ Before=gunicorn.service
 [Service]
 User=<%= @user %>
 Group=<%= @group %>
-PIDFile=<%= @runtime_dir %>/pidfile
-RuntimeDirectory=<%= @runtime_dir %>
+PIDFile=<%= @full_runtime_dir %>/pidfile
+RuntimeDirectory=<%= @short_runtime_dir %>
 WorkingDirectory=<%= @working_dir_override %>
 <% @environment.each do |key, value| -%>
 Environment=<%= key %>=<%= value %>
 <% end -%>
-ExecStart=/usr/bin/gunicorn3 -p <%= @runtime_dir %>/pidfile -c <%= @config_file %> <%= @executable %>
+ExecStart=/usr/bin/gunicorn3 -p <%= @full_runtime_dir %>/pidfile -c <%= @config_file %> <%= @executable %>
 ExecStop=/bin/kill -TERM $MAINPID
 ExecReload=/bin/kill -HUP $MAINPID
 
